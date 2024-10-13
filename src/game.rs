@@ -1,27 +1,35 @@
 #[derive(PartialEq)]
-enum Color {
+pub enum Color {
     RED, BLUE
 }
 
 #[derive(PartialEq)]
-enum FieldType {
+pub enum FieldType {
     CROSS, CIRCLE, UNOWNED
 }
 
-struct Game {
+pub struct Game {
     current_player: Color,
     game_board: Vec<Vec<FieldType>>
 }
 
 impl Game {
     const STARTER_PLAYER: Color = Color::BLUE;
-    const BOARD_SIZE: i8 = 3;
+        const BOARD_SIZE: usize = 3;
 
-    pub fn new(&mut self) -> Game {
+    pub fn new() -> Self {
         Game {
             current_player: Self::STARTER_PLAYER,
-            game_board: self.init_board()
+            game_board: Self::init_board()
         }
+    }
+
+    pub fn get_board_size(&self) -> usize {
+        Self::BOARD_SIZE
+    }
+
+    pub fn get_game_board(&self) -> &Vec<Vec<FieldType>> {
+        &self.game_board
     }
 
     pub fn change_current_player(&mut self) {
@@ -33,7 +41,7 @@ impl Game {
             };
     }
 
-    pub fn capture_cell(&mut self, row: i8, col: i8) {
+    pub fn capture_cell(&mut self, row: usize, col: usize) {
         let field_type =
             if self.current_player == Self::STARTER_PLAYER {
                 FieldType::CROSS
@@ -59,7 +67,7 @@ impl Game {
     }
     
     fn is_any_col_filled(&self) -> bool {
-        for i  in 0..Self::BOARD_SIZE {
+        for i in 0..Self::BOARD_SIZE {
             for j in 0..Self::BOARD_SIZE {
                 return !(self.game_board[j][i] != self.game_board[0][i]
                     || self.game_board[j][j] == FieldType::UNOWNED)
@@ -75,13 +83,13 @@ impl Game {
             self.game_board[index][2-index] != FieldType::UNOWNED && self.game_board[index][2-index] == self.game_board[0][3])
     }
 
-    fn init_board(&mut self) -> Vec<Vec<FieldType>> {
-        let board = Vec::new();
+    fn init_board() -> Vec<Vec<FieldType>> {
+        let mut board = Vec::new();
 
-        for _ in 0..Self::BOARD_SIZE {
-            self.game_board.push(Vec::new());
-            for i in 0..Self::BOARD_SIZE {
-                self.game_board[i].push(FieldType::UNOWNED);
+        for i in 0..Self::BOARD_SIZE {
+            board.push(Vec::new());
+            for _ in 0..Self::BOARD_SIZE {
+                board[i].push(FieldType::UNOWNED);
             }
         }
         board
