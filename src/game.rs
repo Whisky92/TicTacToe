@@ -32,6 +32,10 @@ impl Game {
         &self.game_board
     }
 
+    pub fn is_cell_occupied(&self, row: usize, col: usize) -> bool {
+        self.game_board[row][col] != FieldType::UNOWNED
+    }
+
     pub fn change_current_player(&mut self) {
         self.current_player =
             if self.current_player == Color::BLUE {
@@ -53,14 +57,18 @@ impl Game {
     }
 
     pub fn is_game_finished(&self) -> bool {
-        self.is_any_row_filled() || self.is_any_col_filled() || self.is_any_diagonal_filled()
+        let is_any_row_filled = self.is_any_row_filled();
+        let is_any_col_filled = self.is_any_col_filled();
+        let is_any_diagonal_filled = self.is_any_diagonal_filled();
+
+        is_any_row_filled || is_any_col_filled || is_any_diagonal_filled
     }
 
     fn is_any_row_filled(&self) -> bool {
         self.game_board.iter().any(
             |row| row.iter().all(
                 |cell| {
-                    *cell != FieldType::UNOWNED && *cell != row[0]
+                    *cell != FieldType::UNOWNED && *cell == row[0]
                 }
             )
         )
@@ -68,19 +76,23 @@ impl Game {
     
     fn is_any_col_filled(&self) -> bool {
         for i in 0..Self::BOARD_SIZE {
+            let mut is_filled = true;
             for j in 0..Self::BOARD_SIZE {
-                return !(self.game_board[j][i] != self.game_board[0][i]
-                    || self.game_board[j][j] == FieldType::UNOWNED)
+                if self.game_board[j][i] != self.game_board[0][i]
+                    || self.game_board[j][i] == FieldType::UNOWNED {
+                    is_filled = false;
+                }
             }
+            if is_filled {return true};
         }
-        true
+        false
     }
 
     fn is_any_diagonal_filled(&self) -> bool {
         (0..Self::BOARD_SIZE).all(|index|
             self.game_board[index][index] != FieldType::UNOWNED && self.game_board[index][index] == self.game_board[0][0])
         || (0..Self::BOARD_SIZE).all(|index|
-            self.game_board[index][2-index] != FieldType::UNOWNED && self.game_board[index][2-index] == self.game_board[0][3])
+            self.game_board[index][2-index] != FieldType::UNOWNED && self.game_board[index][2-index] == self.game_board[0][2])
     }
 
     fn init_board() -> Vec<Vec<FieldType>> {
