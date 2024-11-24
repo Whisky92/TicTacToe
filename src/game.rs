@@ -15,7 +15,7 @@ pub struct Game {
 
 impl Game {
     const STARTER_PLAYER: Color = Color::BLUE;
-        const BOARD_SIZE: usize = 3;
+    const BOARD_SIZE: usize = 5;
 
     pub fn new() -> Self {
         Game {

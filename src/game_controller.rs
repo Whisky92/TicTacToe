@@ -33,12 +33,12 @@ impl GameController {
             row_input = String::new();
             col_input = String::new();
 
-            println!("Please enter row (0-2): ");
+            println!("{}", format!("Please enter row (0-{}): ", self.game.get_board_size() - 1));
             io::stdin().read_line(&mut row_input).expect("Failed to read line");
 
             match row_input.trim().parse::<usize>() {
                 Ok(number) => {
-                    if (number < 0 || number > 2) {
+                    if (number < 0 || number > self.game.get_board_size() - 1) {
                         println!("Invalid input");
                         continue;
                     }
@@ -50,12 +50,12 @@ impl GameController {
                 }
             }
 
-            println!("Please enter column (0-2): ");
+            println!("{}", format!("Please enter column (0-{}): ", self.game.get_board_size() - 1));
             io::stdin().read_line(&mut col_input).expect("Failed to read line");
 
             match col_input.trim().parse::<usize>() {
                 Ok(number) => {
-                    if (number < 0 || number > 2) {
+                    if (number < 0 || number > self.game.get_board_size() - 1) {
                         println!("Invalid input");
                         continue;
                     }
