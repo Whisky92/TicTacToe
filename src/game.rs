@@ -24,6 +24,8 @@ impl Game {
         }
     }
 
+    pub fn get_current_player(&self) -> &Color { &self.current_player }
+
     pub fn get_board_size(&self) -> usize {
         Self::BOARD_SIZE
     }
@@ -92,7 +94,7 @@ impl Game {
         (0..Self::BOARD_SIZE).all(|index|
             self.game_board[index][index] != FieldType::UNOWNED && self.game_board[index][index] == self.game_board[0][0])
         || (0..Self::BOARD_SIZE).all(|index|
-            self.game_board[index][2-index] != FieldType::UNOWNED && self.game_board[index][2-index] == self.game_board[0][2])
+            self.game_board[index][Self::BOARD_SIZE - 1 - index] != FieldType::UNOWNED && self.game_board[index][Self::BOARD_SIZE - 1 - index] == self.game_board[0][Self::BOARD_SIZE - 1])
     }
 
     fn init_board() -> Vec<Vec<FieldType>> {
